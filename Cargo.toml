@@ -1,0 +1,12 @@
+[workspace]
+members = ["irc_library"]
+
+[package]
+name = "irc-client"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+egui = "0.36.2"
+irc_library = { version = "0.1.1", path = "irc_library" }
+tracing = "0.1.44"

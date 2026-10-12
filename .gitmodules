@@ -1,0 +1,3 @@
+[submodule "irc_library"]
+	path = irc_library
+	url = https://github.com/nyaruku/irc_library
