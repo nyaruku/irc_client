@@ -3,7 +3,8 @@
 
 mod main_screen;
 
-const FONT: &[u8] = include_bytes!("../assets/fonts/JetBrainsMonoNerdFontMono-Regular.ttf");
+#[path = "fonts/font_loader.rs"]
+mod font_loader;
 
 struct Server {
     name: String,
@@ -49,16 +50,7 @@ fn main() -> eframe::Result {
     };
 
     eframe::run_ui_native("irc-client", options, move |ui, _frame| {
-        load_font(ui.ctx());
+        font_loader::load_fonts(ui.ctx());
         main_screen::draw_ui(ui, &mut app);
     })
-}
-
-/// JetBrains Mono for all text. Cheap to call every frame: egui skips it
-/// once a font with this name is loaded.
-fn load_font(ctx: &eframe::egui::Context) {
-    let families = [eframe::egui::FontFamily::Proportional, eframe::egui::FontFamily::Monospace]
-        .map(|family| eframe::egui::epaint::text::InsertFontFamily { family, priority: eframe::egui::epaint::text::FontPriority::Highest })
-        .to_vec();
-    ctx.add_font(eframe::egui::epaint::text::FontInsert::new("JetBrainsMono", eframe::egui::FontData::from_static(FONT), families));
 }
