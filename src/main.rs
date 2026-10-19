@@ -1,7 +1,7 @@
 // hide console window on Windows in release
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-mod main_screen;
+mod view;
 
 #[path = "fonts/font_loader.rs"]
 mod font_loader;
@@ -14,10 +14,12 @@ struct Server {
 struct JoinedChannel {
     name: String,
     users: Vec<String>,
+    messages: Vec<view::chat::Message>,
 }
 
 struct DirectMessage {
     nickname: String,
+    messages: Vec<view::chat::Message>,
 }
 
 #[derive(Clone, Copy, PartialEq)]
@@ -29,18 +31,18 @@ enum Selection {
 #[derive(Default)]
 struct Irc {
     servers: Vec<Server>,
-    // Server whose channels the sidebar lists, dm list when no server.
     open_server: Option<usize>,
     selected: Option<Selection>,
     user_search: String,
+    chat_input: String,
     show_users: bool,
 }
 
 fn main() -> eframe::Result {
     let options = eframe::NativeOptions {
         viewport: eframe::egui::ViewportBuilder::default()
-            .with_inner_size([800.0, 600.0])
-            .with_min_inner_size([640.0, 480.0]),
+            .with_inner_size([1280.0, 720.0])
+            .with_min_inner_size([940.0, 500.0]),
         ..Default::default()
     };
 
@@ -51,6 +53,6 @@ fn main() -> eframe::Result {
 
     eframe::run_ui_native("irc-client", options, move |ui, _frame| {
         font_loader::load_fonts(ui.ctx());
-        main_screen::draw_ui(ui, &mut app);
+        view::draw_ui(ui, &mut app);
     })
 }
